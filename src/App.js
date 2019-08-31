@@ -18,7 +18,7 @@ const App = () => (
 
       <Route exact path="/" component={Home} />
       <Route exact path="/countries" component={Countries} />
-      <Route path="/countries/:country" component={Country} />
+      <Route path="/countries/:code" component={Country} />
     </Router>
   </ThemeProvider>
 )
