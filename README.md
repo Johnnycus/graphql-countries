@@ -1,3 +1,12 @@
+## Features
+1. Header with animation. Infinite animation on home page. On other pages animation works while the data from GraphQL endpoint is being loaded
+2. Search bar
+3. Countries list uses [react-window](https://github.com/bvaughn/react-window) for rendering
+4. After you click on a country we save it in the localStorage and then show on the home page as "Recently viewed"
+5. When you go to URL /countries/:code by yourself the list of countries on the left will be automaticly scrolled to the country that you are checking right now
+6. Live demo on [Zeit Now](https://front-end-nzhpilpijd.now.sh/)
+7. Hooks are everywhere (and emojis 🥶)
+
 # Front-end task of Code Challenge for Scoutbase
 
 This task is for demonstrating your understanding of HTML, CSS, Javascript, React & related libraries.
