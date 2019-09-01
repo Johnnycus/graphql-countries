@@ -1,57 +1,74 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useQuery } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
+import { useQuery, useApolloClient } from '@apollo/react-hooks'
+import styled from 'styled-components'
+import { FixedSizeList as List } from 'react-window'
+import AutoSizer from 'react-virtualized-auto-sizer'
 
-const COUNTRIES_QUERY = gql`
-  query COUNTRIES_QUERY {
-    countries {
-      name
-      code
-      continent {
-        name
-      }
-      languages {
-        code
-        name
-        native
-      }
-    }
-  }
-`
+import { COUNTRIES_QUERY } from '../utils/queries'
 
-const Countries = ({ match: { url } }) => {
+const CountriesList = styled.div``
+
+const Countries = ({ match: { url }, match }) => {
+  const client = useApolloClient()
+
   const {
     loading,
     error,
     data: { countries },
   } = useQuery(COUNTRIES_QUERY)
 
-  if (loading) return <p>Loading...</p>
+  const [ref, setRef] = useState(null)
+
+  useEffect(() => {
+    const code = window.location.pathname.substring(11)
+
+    client.writeData({ data: { loading } })
+
+    if (ref && code && countries && countries.length > 0) {
+      const item = countries.findIndex(country => country.code === code)
+      ref.scrollToItem(item, 'center')
+    }
+  }, [ref])
+
+  const height = window.innerHeight - 183
+
+  if (loading) return <CountriesList />
   if (error) return <p>Error!</p>
 
   return (
-    <>
-      <h1>Countries</h1>
+    <AutoSizer disableHeight>
+      {({ width }) => (
+        <List
+          ref={el => {
+            setRef(el)
+          }}
+          itemCount={countries.length}
+          itemSize={200}
+          height={height}
+          width={width}
+        >
+          {({ index, style }) => (
+            <CountriesList key={countries[index].code} style={style}>
+              <Link to={`${url}/${countries[index].code}`}>
+                <h1>{countries[index].name}</h1>
+              </Link>
 
-      {countries.map(({ code, name, continent, languages }) => (
-        <div key={code}>
-          <Link to={`${url}/${code}`}>
-            <h1>{name}</h1>
-          </Link>
+              <p>{countries[index].continent.name}</p>
 
-          <p>{continent.name}</p>
-
-          <ul>
-            {languages.map(lang => (
-              <li key={code + lang.code}>
-                {lang.name} – {lang.native}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </>
+              <ul>
+                {countries[index].languages.map(lang => (
+                  <li key={countries[index].code + lang.code}>
+                    {lang.name} – {lang.native}
+                  </li>
+                ))}
+              </ul>
+            </CountriesList>
+          )}
+        </List>
+      )}
+    </AutoSizer>
   )
 }
+
 export default Countries
