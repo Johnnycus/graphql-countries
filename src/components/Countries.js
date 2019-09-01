@@ -8,7 +8,55 @@ import { flag } from 'country-emoji'
 
 import { COUNTRIES_QUERY } from '../utils/queries'
 
-const CountriesList = styled.div``
+const CountriesList = styled.div`
+  h1 {
+    margin-bottom: 2.5px;
+
+    a {
+      text-decoration: none;
+      color: #543ab7;
+    }
+  }
+
+  .continent {
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 5px 0 0;
+
+    span {
+      font-size: 20px;
+      font-weight: 300;
+    }
+  }
+
+  @media (min-width: 769px) {
+    margin: 0 0 0 30px;
+    width: calc(100% - 30px) !important;
+  }
+
+  @media (max-width: 768px) {
+    margin: 0 0 0 2.5px;
+
+    h1 {
+      font-size: 22px;
+    }
+
+    .continent {
+      font-size: 18px;
+    }
+
+    ul {
+      span {
+        font-size: 16px;
+      }
+    }
+  }
+`
 
 const SearchField = styled.input`
   z-index: 1;
@@ -47,7 +95,13 @@ const Countries = ({ match: { url }, match }) => {
 
     client.writeData({ data: { loading } })
 
-    countries && countries.length > 0 && setLocalCountries(countries)
+    countries &&
+      countries.length > 0 &&
+      setLocalCountries(
+        countries.sort((a, b) =>
+          a.name > b.name ? 1 : b.name > a.name ? -1 : 0,
+        ),
+      )
 
     if (ref && code && countries && countries.length > 0) {
       const item = countries.findIndex(country => country.code === code)
@@ -56,7 +110,10 @@ const Countries = ({ match: { url }, match }) => {
     }
   }, [client, loading, countries, ref])
 
-  const height = window.innerHeight - 183
+  const height =
+    window.innerWidth < 768
+      ? window.innerHeight - 120
+      : window.innerHeight - 183
 
   const [search, setSearch] = useState('')
 
@@ -83,6 +140,7 @@ const Countries = ({ match: { url }, match }) => {
         onChange={handleSearch}
         placeholder="Search for country"
       />
+
       <AutoSizer disableHeight>
         {({ width }) => (
           <List
@@ -90,7 +148,7 @@ const Countries = ({ match: { url }, match }) => {
               setRef(el)
             }}
             itemCount={localCountries.length}
-            itemSize={200}
+            itemSize={window.innderWidth < 768 ? 150 : 220}
             height={height}
             width={width}
           >
@@ -106,12 +164,12 @@ const Countries = ({ match: { url }, match }) => {
                     </Link>
                   </h1>
 
-                  <p>{continent.name}</p>
+                  <span className="continent">{continent.name}</span>
 
                   <ul>
                     {languages.map(lang => (
                       <li key={code + lang.code}>
-                        {lang.name} – {lang.native}
+                        <span>{lang.name}</span> – <span>{lang.native}</span>
                       </li>
                     ))}
                   </ul>

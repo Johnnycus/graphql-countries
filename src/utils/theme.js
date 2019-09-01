@@ -8,7 +8,6 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0;
     font-family: 'Acme', 'Fira Sans', 'Helvetica Neue',
       sans-serif;
-    overflow: hidden;
   }
 `
 
