@@ -11,4 +11,4 @@ export const GlobalStyle = createGlobalStyle`
   }
 `
 
-export const theme = {}
+export const theme = { purple: '#543ab7', green: '#00acc1' }

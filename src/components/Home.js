@@ -7,7 +7,7 @@ import { flag } from 'country-emoji'
 const Container = styled.div`
   a {
     text-decoration: none;
-    color: #543ab7;
+    color: ${props => props.theme.purple};
   }
 `
 
@@ -16,7 +16,7 @@ const Countries = styled.div`
   padding: 20px;
   font-size: 48px;
   text-align: center;
-  border: 1px solid #543ab7;
+  border: 1px solid ${props => props.theme.purple};
   border-radius: 15px;
 
   @media (max-width: 768px) {
@@ -24,10 +24,24 @@ const Countries = styled.div`
   }
 
   a {
-    background: -webkit-linear-gradient(#543ab7, #00acc1);
+    background: -webkit-linear-gradient(
+      ${props => props.theme.purple},
+      ${props => props.theme.green}
+    );
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     display: block;
+
+    &:hover {
+      background: -webkit-linear-gradient(
+        ${props => props.theme.green},
+        ${props => props.theme.purple}
+      );
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
   }
 `
 
@@ -36,7 +50,7 @@ const Viewed = styled.div`
 
   h1 {
     font-size: 48px;
-    color: #00acc1;
+    color: ${props => props.theme.green};
   }
 
   div {
@@ -45,7 +59,7 @@ const Viewed = styled.div`
     grid-template-rows: 1fr;
 
     a {
-      color: #543ab7;
+      color: ${props => props.theme.purple};
       font-size: 24px;
       padding: 7.5px;
     }

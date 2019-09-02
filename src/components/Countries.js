@@ -14,7 +14,7 @@ const CountriesList = styled.div`
 
     a {
       text-decoration: none;
-      color: #543ab7;
+      color: ${props => props.theme.purple};
     }
   }
 
@@ -77,7 +77,7 @@ const SearchField = styled.input`
   }
 `
 
-const Countries = ({ match: { url }, match }) => {
+const Countries = ({ match: { url } }) => {
   const client = useApolloClient()
 
   const {
@@ -89,6 +89,8 @@ const Countries = ({ match: { url }, match }) => {
   const [localCountries, setLocalCountries] = useState([])
 
   const [ref, setRef] = useState(null)
+
+  const mobile = window.innerWidth < 768
 
   useEffect(() => {
     const code = window.location.pathname.substring(11)
@@ -110,10 +112,7 @@ const Countries = ({ match: { url }, match }) => {
     }
   }, [client, loading, countries, ref])
 
-  const height =
-    window.innerWidth < 768
-      ? window.innerHeight - 120
-      : window.innerHeight - 183
+  const height = mobile ? window.innerHeight - 120 : window.innerHeight - 183
 
   const [search, setSearch] = useState('')
 
@@ -148,7 +147,7 @@ const Countries = ({ match: { url }, match }) => {
               setRef(el)
             }}
             itemCount={localCountries.length}
-            itemSize={window.innderWidth < 768 ? 150 : 220}
+            itemSize={mobile ? 150 : 220}
             height={height}
             width={width}
           >
